@@ -431,4 +431,5 @@ class VehicleController extends Controller
 
         return response()->json(['message' => 'Images reordered successfully']);
     }
+
 }

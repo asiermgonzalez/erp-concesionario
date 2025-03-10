@@ -16,14 +16,19 @@ export default defineConfig({
   server: {
     proxy: {
       '/api/usuarios': {
-        target: 'http://localhost:8001',
+        target: 'http://localhost:8000',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/usuarios/, '')
+        rewrite: (path) => path.replace(/^\/api\/usuarios/, 'api')
       },
       '/api/clientes': {
+        target: 'http://localhost:8001',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/clientes/, 'api')
+      },
+      '/api/vehiculos': {
         target: 'http://localhost:8002',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/clientes/, '')
+        rewrite: (path) => path.replace(/^\/api\/vehiculos/, 'api/vehicles')
       }
     }
   }

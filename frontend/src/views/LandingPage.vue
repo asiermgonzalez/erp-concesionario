@@ -80,16 +80,28 @@ const formatPrecio = (precio) => {
 // Cargar vehículos destacados al montar el componente
 onMounted(async () => {
   try {
+    console.log('Intentando cargar vehículos destacados...')
     // La URL debe apuntar al endpoint correspondiente en tu microservicio de vehículos
     const response = await axios.get('/api/vehiculos/destacados')
-    vehiculosDestacados.value = response.data
+    console.log('Respuesta del servidor:', response.data)
+    
+    // Asegurarse de que la respuesta tenga el formato correcto
+    if (Array.isArray(response.data)) {
+      vehiculosDestacados.value = response.data
+    } else if (response.data.data && Array.isArray(response.data.data)) {
+      vehiculosDestacados.value = response.data.data
+    } else {
+      console.warn('El formato de la respuesta no es el esperado:', response.data)
+      throw new Error('Formato de respuesta incorrecto')
+    }
+    
     loading.value = false
   } catch (err) {
     console.error('Error al cargar vehículos:', err)
     error.value = 'No se pudieron cargar los vehículos destacados. Por favor, inténtalo de nuevo más tarde.'
     loading.value = false
     
-    // Datos de ejemplo en caso de error
+    // Datos de ejemplo en caso de error (por ahora usaremos esto hasta que el microservicio esté listo)
     vehiculosDestacados.value = [
       {
         id: 1,
