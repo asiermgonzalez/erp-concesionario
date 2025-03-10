@@ -1,0 +1,99 @@
+services:
+  # Servicio de microservicio de usuarios
+  usuarios:
+    build: ./microservicios/microservicio-usuarios
+    ports:
+      - "8001:8000"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=mysql
+      - DB_HOST=db-usuarios
+      - DB_PORT=3306
+      - DB_DATABASE=users_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+    depends_on:
+      - db-usuarios
+    volumes:
+      - ./microservicios/microservicio-usuarios:/var/www/html
+
+  # Servicio de microservicio de clientes
+  clientes:
+    build:
+      context: ./microservicios/microservicio-clientes
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8000"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=mysql
+      - DB_HOST=db-clientes
+      - DB_PORT=3306
+      - DB_DATABASE=clients_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+    depends_on:
+      - db-clientes
+    volumes:
+      - ./microservicios/microservicio-clientes:/var/www/html
+
+  # Servicio de microservicio de vehículos
+  vehiculos:
+    build:
+      context: ./microservicios/microservicio-vehiculos
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8000"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=mysql
+      - DB_HOST=db-vehiculos
+      - DB_PORT=3306
+      - DB_DATABASE=vehicles_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+    depends_on:
+      - db-clientes
+    volumes:
+      - ./microservicios/microservicio-vehiculos:/var/www/html
+
+  # Base de datos para microservicio de usuarios
+  db-usuarios:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=users_db
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "3310:3306"
+    volumes:
+      - db-usuarios-data:/var/lib/mysql
+
+  # Base de datos para microservicio de clientes
+  db-clientes:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=clients_db
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "3307:3306"
+    volumes:
+      - db-clientes-data:/var/lib/mysql
+
+  # Base de datos para microservicio de vehículos
+  db-vehiculos:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=vehiculos_db
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "3307:3306"
+    volumes:
+      - db-vehiculos-data:/var/lib/mysql
+
+volumes:
+  db-usuarios-data:
+  db-clientes-data:
+  db-vehiculos-data:

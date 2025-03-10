@@ -15,7 +15,7 @@ class ClientController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api');
+        //$this->middleware('auth:api');
     }
 
     /**
@@ -52,6 +52,7 @@ class ClientController extends Controller
 
         return response()->json($clients);
     }
+    
 
     /**
      * Store a newly created client in storage.
